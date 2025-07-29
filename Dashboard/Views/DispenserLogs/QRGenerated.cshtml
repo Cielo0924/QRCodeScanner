@@ -1,0 +1,34 @@
+﻿@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+
+@{
+    ViewData["Title"] = "QR Code Generated";
+    var qrBase64 = Context.Session.GetString("QRCodeImage");
+    var dispenser = ViewBag.Dispenser as Dashboard.Models.Dispenser;
+}
+
+<h2>QR Code Successfully Generated!</h2>
+
+@if (dispenser != null)
+{
+    <h4>
+        <span class="badge bg-success" style="font-size: 1rem;">
+            Dispenser ID: @dispenser.DispenserID
+        </span>
+        <small class="text-muted">(@dispenser.Location)</small>
+    </h4>
+}
+
+@if (!string.IsNullOrEmpty(qrBase64))
+{
+    <p>Scan this QR code to log again for this dispenser:</p>
+    <img src="data:image/png;base64,@qrBase64" alt="QR Code" style="width: 6cm; height: 6cm;" />
+}
+else
+{
+    <p>QR Code generation failed or session expired.</p>
+}

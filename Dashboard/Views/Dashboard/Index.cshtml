@@ -1,0 +1,44 @@
+﻿@model DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h2>Alcohol Dispenser Monitoring Dashboard</h2>
+<div class="row mb-4">
+    <div class="col-md-3"><strong>Total Dispensers:</strong> @Model.TotalDispensers</div>
+    <div class="col-md-3"><strong>Total Logs:</strong> @Model.TotalLogs</div>
+    <div class="col-md-3"><strong>Refills:</strong> @Model.TotalRefills</div>
+    <div class="col-md-3"><strong>Checks:</strong> @Model.TotalChecks</div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-3"><strong>Replacements:</strong> @Model.TotalReplacements</div>
+</div>
+
+<h4>Recent Dispenser Logs</h4>
+<a asp-controller="DispenserLogs" asp-action="Create" class="btn btn-primary mb-3">Add New Log</a>
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>DateTime</th>
+            <th>Dispenser ID</th>
+            <th>Location</th>
+            <th>Action</th>
+            <th>Staff</th>
+            <th>Remarks</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var log in Model.RecentLogs)
+        {
+            <tr>
+                <td>@log.DateTime</td>
+                <td>@log.DispenserID</td>
+                <td>@log.Dispenser?.Location</td>
+                <td>@log.ActionTaken</td>
+                <td>@log.StaffName</td>
+                <td>@log.Remarks</td>
+            </tr>
+        }
+    </tbody>
+</table>

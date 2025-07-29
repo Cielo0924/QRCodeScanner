@@ -1,0 +1,59 @@
+﻿@model Dashboard.Models.DispenserLog
+
+@{
+    var isEdit = Model != null && Model.LogID != 0;
+    ViewData["Title"] = isEdit ? "Edit Log" : "Create Log";
+    string formAction = isEdit ? "Edit" : "Create";
+}
+
+<h2 class="mb-4">@ViewData["Title"]</h2>
+
+<form asp-action="@formAction" method="post">
+    <!-- Hidden LogID field to preserve ID during edit -->
+    @if (isEdit)
+    {
+        <input type="hidden" asp-for="LogID" />
+    }
+
+    <div class="form-group mb-3">
+        <label asp-for="DispenserID" class="form-label">Dispenser ID</label>
+        <input asp-for="DispenserID" class="form-control" />
+        <span asp-validation-for="DispenserID" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="StaffName" class="form-label">Staff Name</label>
+        <input asp-for="StaffName" class="form-control" />
+        <span asp-validation-for="StaffName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="ActionTaken" class="form-label">Action Taken</label>
+        <select asp-for="ActionTaken" class="form-control">
+            <option value="">-- Select Action --</option>
+            <option value="Refill">Refill</option>
+            <option value="Check">Check</option>
+            <option value="Replace">Replace</option>
+        </select>
+        <span asp-validation-for="ActionTaken" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Remarks" class="form-label">Remarks (optional)</label>
+        <textarea asp-for="Remarks" class="form-control" rows="3"></textarea>
+    </div>
+
+    <div class="form-group mb-4">
+        <label class="form-label">Date and Time (auto-filled)</label>
+        <input class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")" readonly />
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        @(isEdit ? "Update Log" : "Submit Log")
+    </button>
+</form>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+}
