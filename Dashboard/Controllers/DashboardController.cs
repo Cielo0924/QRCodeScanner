@@ -1,4 +1,4 @@
-using Dashboard.Data;
+﻿using Dashboard.Data;
 using Dashboard.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +16,7 @@ namespace Dashboard.Controllers
 
         public IActionResult Index()
         {
-            var model = new DashboardViewModel
+            var viewModel = new DashboardViewModel
             {
                 TotalDispensers = _context.Dispensers.Count(),
                 TotalLogs = _context.DispenserLogs.Count(),
@@ -24,14 +24,19 @@ namespace Dashboard.Controllers
                 TotalChecks = _context.DispenserLogs.Count(l => l.ActionTaken == "Check"),
                 TotalReplacements = _context.DispenserLogs.Count(l => l.ActionTaken == "Replace"),
                 RecentLogs = _context.DispenserLogs
-                              .Include(l => l.Dispenser)
-                              .OrderByDescending(l => l.DateTime)
-                              .Take(10)
-                              .ToList()
+                    .Include(l => l.Dispenser)
+                    .OrderByDescending(l => l.DateTime)
+                    .Take(10)
+                    .ToList(),
+
+                // ✅ Include all dispensers
+                Dispensers = _context.Dispensers.Include(d => d.Unit).ToList()
             };
 
-            return View(model);
+            return View(viewModel);
         }
+
+
     }
 
 }

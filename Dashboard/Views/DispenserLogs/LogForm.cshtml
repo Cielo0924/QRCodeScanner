@@ -1,4 +1,4 @@
-﻿@model List<Dashboard.Models.DispenserLog>
+﻿@* @model List<Dashboard.Models.DispenserLog>
 @{
     ViewBag.Title = "Dispenser Log History";
     var dispenser = ViewBag.Dispenser as Dashboard.Models.Dispenser;
@@ -31,4 +31,92 @@ else
             }
         </tbody>
     </table>
+} *@
+
+
+@model Dashboard.Models.DispenserLog
+@{
+    ViewBag.Title = "Dispenser Log Sheet";
+    var dispenser = ViewBag.Dispenser as Dashboard.Models.Dispenser;
+}
+
+<h2>Log Refill/Check/Replace for Dispenser: @dispenser.DispenserID (@dispenser.Location)</h2>
+
+<form asp-controller="DispenserLogs" asp-action="SubmitLog" method="post">
+    <input type="hidden" asp-for="DispenserID" value="@dispenser.DispenserID" />
+
+
+    <div class="mb-3">
+        <label class="form-label">Date & Time</label>
+        <input type="text" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")" readonly />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="StaffName" class="form-label">Staff Name / Initials</label>
+        <input asp-for="StaffName" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ActionTaken" class="form-label">Action Taken</label>
+        <select asp-for="ActionTaken" class="form-select" required>
+            <option value="">-- Select Action --</option>
+            <option>Refill</option>
+            <option>Check</option>
+            <option>Replace</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Remarks" class="form-label">Remarks</label>
+        <textarea asp-for="Remarks" class="form-control" rows="3"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit Log</button>
+</form>
+
+<!-- Modal -->
+<div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="feedbackModalLabel">Submission Status</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @if (TempData["Success"] != null)
+                {
+                    <span>@TempData["Success"]</span>
+                }
+                else if (TempData["Error"] != null)
+                {
+                    <span class="text-danger">@TempData["Error"]</span>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .modal-header.bg-success {
+        background-color: #28a745 !important;
+    }
+
+</style>
+
+
+@section Scripts {
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const hasMessage = '@TempData["Success"]' || '@TempData["Error"]';
+            if (hasMessage.trim() !== '') {
+                const feedbackModal = new bootstrap.Modal(document.getElementById('feedbackModal'));
+                feedbackModal.show();
+
+                // Auto-close modal after 3 seconds
+                setTimeout(() => {
+                    feedbackModal.hide();
+                }, 3000);
+            }
+        });
+    </script>
 }

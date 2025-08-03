@@ -1,14 +1,14 @@
-﻿@if (TempData["Error"] != null)
+﻿@{
+    ViewData["Title"] = "QR Code Generated";
+    var qrBase64 = Context.Session.GetString("QRCodeImage");
+    var dispenser = ViewBag.Dispenser as Dashboard.Models.Dispenser;
+}
+
+@if (TempData["Error"] != null)
 {
     <div class="alert alert-danger">
         @TempData["Error"]
     </div>
-}
-
-@{
-    ViewData["Title"] = "QR Code Generated";
-    var qrBase64 = Context.Session.GetString("QRCodeImage");
-    var dispenser = ViewBag.Dispenser as Dashboard.Models.Dispenser;
 }
 
 <h2>QR Code Successfully Generated!</h2>
@@ -30,5 +30,11 @@
 }
 else
 {
-    <p>QR Code generation failed or session expired.</p>
+    <p class="text-danger">QR Code generation failed or session expired.</p>
 }
+
+<div class="mt-4">
+    <a asp-controller="Dashboard" asp-action="Index" class="btn btn-secondary">
+        ← Back to Dashboard
+    </a>
+</div>

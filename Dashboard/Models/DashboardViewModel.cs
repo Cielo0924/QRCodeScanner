@@ -7,7 +7,12 @@
         public int TotalRefills { get; set; }
         public int TotalChecks { get; set; }
         public int TotalReplacements { get; set; }
+
         public List<DispenserLog> RecentLogs { get; set; }
+
+        // ✅ Add this line
+        public List<Dispenser> Dispensers { get; set; }
     }
+
 
 }

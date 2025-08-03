@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "Staff Verification";
+    var dispenserId = ViewBag.DispenserID as string ?? Context.Request.Query["dispenserId"].ToString();
+    var verifiedCode = Context.Session.GetString("VerifiedStaffCode");
+}
+
+<h3>Enter Staff Code to Access Log Sheet</h3>
+
+<form method="post" asp-action="VerifyStaff" asp-controller="DispenserLogs">
+    <input type="hidden" name="dispenserId" value="@dispenserId" />
+
+    <div class="mb-3">
+        <label class="form-label">Staff Initials / Code</label>
+        <input type="text" name="staffCode" class="form-control" placeholder="e.g., MJ or ST-001" required />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Verify</button>
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger mt-2">@TempData["Error"]</div>
+    }
+</form>
+
+@section Scripts {
+    @if (!string.IsNullOrEmpty(verifiedCode))
+    {
+        <script>
+            // Staff already verified, redirect to LogForm automatically
+            window.location.href = "/DispenserLogs/LogForm?dispenserId=@dispenserId";
+        </script>
+    }
+}

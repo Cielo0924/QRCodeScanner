@@ -1,9 +1,12 @@
 ﻿@model DashboardViewModel
+
 @{
     ViewData["Title"] = "Dashboard";
 }
 
-<h2>Alcohol Dispenser Monitoring Dashboard</h2>
+<h2 class="mb-4">Alcohol Dispenser Monitoring Dashboard</h2>
+
+<!-- 📊 Summary counters -->
 <div class="row mb-4">
     <div class="col-md-3"><strong>Total Dispensers:</strong> @Model.TotalDispensers</div>
     <div class="col-md-3"><strong>Total Logs:</strong> @Model.TotalLogs</div>
@@ -15,30 +18,63 @@
     <div class="col-md-3"><strong>Replacements:</strong> @Model.TotalReplacements</div>
 </div>
 
-<h4>Recent Dispenser Logs</h4>
-<a asp-controller="DispenserLogs" asp-action="Create" class="btn btn-primary mb-3">Add New Log</a>
+<!-- 📋 Table of dispensers -->
+<h4>All Dispensers</h4>
+<a asp-controller="Dispenser" asp-action="Create" class="btn btn-success mb-3">Add New Dispenser</a>
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
-            <th>DateTime</th>
             <th>Dispenser ID</th>
             <th>Location</th>
-            <th>Action</th>
-            <th>Staff</th>
-            <th>Remarks</th>
+            <th>Unit</th>
+            <th>Date Added</th>
+            <th>Is Active?</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var log in Model.RecentLogs)
+        @foreach (var d in Model.Dispensers)
         {
             <tr>
-                <td>@log.DateTime</td>
-                <td>@log.DispenserID</td>
-                <td>@log.Dispenser?.Location</td>
-                <td>@log.ActionTaken</td>
-                <td>@log.StaffName</td>
-                <td>@log.Remarks</td>
+                <td>
+                    <a href="javascript:void(0);"
+                       data-id="@d.DispenserID"
+                       data-bs-toggle="modal"
+                       data-bs-target="#qrModal"
+                       class="text-primary open-qr-modal">
+                        @d.DispenserID
+                    </a>
+                </td>
+
+                <td>@(d.Location ?? "—")</td>
+                <td>@(d.Unit?.UnitName ?? "—")</td>
+                <td>@d.DateAdded.ToString("yyyy-MM-dd")</td>
+                <td>@(d.IsActive ? "Yes" : "No")</td>
             </tr>
         }
     </tbody>
 </table>
+
+
+<!-- Modal container -->
+<div class="modal fade" id="qrModal" tabindex="-1" aria-labelledby="qrModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" id="qrModalContent">
+            <!-- QR content will be loaded here -->
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).on("click", ".open-qr-modal", function () {
+            var dispenserId = $(this).data("id");
+            $("#qrModalContent").html('<div class="modal-body text-center p-4"><div class="spinner-border text-primary"></div><p class="mt-2">Loading...</p></div>');
+
+            $.get('/Dispenser/Details', { id: dispenserId }, function (data) {
+                $("#qrModalContent").html(data);
+            });
+        });
+    </script>
+}
+
