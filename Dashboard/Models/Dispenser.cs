@@ -10,6 +10,7 @@
         public DateTime DateAdded { get; set; }
 
         public Unit Unit { get; set; }
+        public string? QRCodeImageBase64 { get; set; }
     }
 
 }

@@ -4,18 +4,36 @@
     <h5 class="modal-title">QR Code for @Model.DispenserID</h5>
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
-<div class="modal-body text-center">
+
+<div class="modal-body text-center" id="qr-print-area">
     <p><strong>Location:</strong> @Model.Location</p>
     <p><strong>Unit:</strong> @Model.UnitID</p>
 
     @if (!string.IsNullOrEmpty(Model.QRCodeURL))
     {
-        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=@Model.QRCodeURL"
-             alt="QR Code" class="img-fluid" />
-        <p class="mt-3"><code>@Model.QRCodeURL</code></p>
+        <!-- ✅ Display for viewing (fast load) -->
+        <img id="qr-code-img"
+             src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=@Model.QRCodeURL"
+             alt="QR Code"
+             class="img-fluid mb-2" />
+        <p class="mt-2"><code>@Model.QRCodeURL</code></p>
     }
     else
     {
         <p class="text-danger">QR code not available.</p>
+    }
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+    @if (!string.IsNullOrEmpty(Model.QRCodeURL))
+    {
+        <!-- ✅ This calls your controller to generate backend-quality PDF -->
+        <a class="btn btn-primary"
+           href="@Url.Action("GenerateQRCodePDF", "Dashboard", new { id = Model.DispenserID })"
+           target="_blank">
+            Download PDF
+        </a>
     }
 </div>

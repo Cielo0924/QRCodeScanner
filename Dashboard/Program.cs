@@ -1,7 +1,11 @@
 ﻿using Dashboard.Data;
 using Microsoft.EntityFrameworkCore;
+using QuestPDF.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
+
+QuestPDF.Settings.License = LicenseType.Community;  // ← Add this line
+
 
 // Add DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>

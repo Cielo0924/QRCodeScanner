@@ -75,6 +75,7 @@ namespace Dashboard.Controllers
             string qrBase64 = qrCode.GetGraphic(20);
 
             dispenser.QRCodeURL = url;
+            dispenser.QRCodeImageBase64 = qrBase64;
             _context.Update(dispenser);
             await _context.SaveChangesAsync();
 

@@ -28,7 +28,6 @@
             <th>Location</th>
             <th>Unit</th>
             <th>Date Added</th>
-            <th>Is Active?</th>
         </tr>
     </thead>
     <tbody>
@@ -48,7 +47,6 @@
                 <td>@(d.Location ?? "—")</td>
                 <td>@(d.Unit?.UnitName ?? "—")</td>
                 <td>@d.DateAdded.ToString("yyyy-MM-dd")</td>
-                <td>@(d.IsActive ? "Yes" : "No")</td>
             </tr>
         }
     </tbody>
@@ -77,4 +75,3 @@
         });
     </script>
 }
-
