@@ -79,11 +79,23 @@ namespace Dashboard.Controllers
             _context.DispenserLogs.Add(log);
             _context.SaveChanges();
 
+            // ✅ Store success message in TempData
             TempData["Success"] = "Log entry submitted successfully!";
-            HttpContext.Session.Remove("VerifiedStaffCode"); // ✅ Clear session after one-time log
+            TempData["DispenserID"] = log.DispenserID;
 
-            return RedirectToAction("VerifyStaff", new { dispenserId = log.DispenserID });
+            HttpContext.Session.Remove("VerifiedStaffCode"); // Optional: Clear session
+
+            return RedirectToAction("LogSuccess");
         }
+
+        [HttpGet]
+        public IActionResult LogSuccess()
+        {
+            ViewBag.DispenserID = TempData["DispenserID"];
+            return View();
+        }
+
+
     }
 
 }

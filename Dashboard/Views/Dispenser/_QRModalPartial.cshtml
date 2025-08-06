@@ -16,7 +16,9 @@
              src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=@Model.QRCodeURL"
              alt="QR Code"
              class="img-fluid mb-2" />
-        <p class="mt-2"><code>@Model.QRCodeURL</code></p>
+        <p class="mt-2">
+            <a href="@Model.QRCodeURL" target="_blank">@Model.QRCodeURL</a>
+        </p>
     }
     else
     {
