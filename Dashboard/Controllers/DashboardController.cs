@@ -50,8 +50,24 @@ namespace Dashboard.Controllers
 
 
 
-        public IActionResult Index()
+        public IActionResult Index(string? unitId, int unitPage = 1)
         {
+            int pageSize = 10;
+
+            var dispensersQuery = _context.Dispensers.Include(d => d.Unit).AsQueryable();
+
+            if (!string.IsNullOrEmpty(unitId) && int.TryParse(unitId, out int parsedUnitId))
+            {
+                dispensersQuery = dispensersQuery.Where(d => d.UnitID == parsedUnitId);
+                ViewBag.FilteredUnitID = parsedUnitId;
+                ViewBag.FilteredUnitName = _context.Units.FirstOrDefault(u => u.UnitID == parsedUnitId)?.UnitName;
+            }
+
+            // Units for pagination
+            var allUnits = _context.Units.OrderBy(u => u.UnitName).ToList();
+            var pagedUnits = allUnits.Skip((unitPage - 1) * pageSize).Take(pageSize).ToList();
+            int totalPages = (int)Math.Ceiling(allUnits.Count / (double)pageSize);
+
             var viewModel = new DashboardViewModel
             {
                 TotalDispensers = _context.Dispensers.Count(),
@@ -64,10 +80,35 @@ namespace Dashboard.Controllers
                     .OrderByDescending(l => l.DateTime)
                     .Take(10)
                     .ToList(),
-                Dispensers = _context.Dispensers.Include(d => d.Unit).ToList()
+                Dispensers = dispensersQuery.ToList(),
+                Units = pagedUnits
             };
+
+            ViewBag.CurrentPage = unitPage;
+            ViewBag.TotalPages = totalPages;
 
             return View(viewModel);
         }
+
+        public IActionResult DispensersList(int unitId)
+        {
+            var unit = _context.Units.FirstOrDefault(u => u.UnitID == unitId);
+            var dispensers = _context.Dispensers
+                .Where(d => d.UnitID == unitId)
+                .Include(d => d.Unit)
+                .ToList();
+
+            var viewModel = new DashboardViewModel
+            {
+                Dispensers = dispensers,
+                Units = _context.Units.ToList(), // Optional: if you still need Units
+            };
+
+            ViewBag.FilteredUnitName = unit?.UnitName;
+            ViewBag.FilteredUnitID = unit?.UnitID;
+
+            return View(viewModel); // 👈 View file must be named `DispensersList.cshtml`
+        }
+
     }
 }

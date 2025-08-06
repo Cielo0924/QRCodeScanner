@@ -21,16 +21,14 @@ namespace Dashboard.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            ViewBag.UnitList = _context.Units
-                .Select(u => new SelectListItem
-                {
-                    Value = u.UnitID.ToString(),
-                    Text = u.UnitName
-                })
+            var units = _context.Units
+                .Select(u => new { u.UnitID, u.UnitName })
                 .ToList();
 
+            ViewBag.UnitMap = System.Text.Json.JsonSerializer.Serialize(units);
             return View();
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]

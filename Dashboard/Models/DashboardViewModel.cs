@@ -11,6 +11,8 @@
         public List<DispenserLog> RecentLogs { get; set; }
 
         // ✅ Add this line
+        public List<Unit> Units { get; set; }
+
         public List<Dispenser> Dispensers { get; set; }
     }
 
