@@ -8,6 +8,12 @@
         public int TotalChecks { get; set; }
         public int TotalReplacements { get; set; }
 
+        public int ActiveDispensers { get; set; }
+        public int MaintenanceDispensers { get; set; }
+        public int TodaysLogs { get; set; }
+        public int ThisWeeksLogs { get; set; }
+        public string Status { get; set; } // "Active", "Maintenance", etc.
+
         public List<DispenserLog> RecentLogs { get; set; }
 
         // ✅ Add this line

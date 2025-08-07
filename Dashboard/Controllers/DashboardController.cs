@@ -110,5 +110,6 @@ namespace Dashboard.Controllers
             return View(viewModel); // 👈 View file must be named `DispensersList.cshtml`
         }
 
+
     }
 }
