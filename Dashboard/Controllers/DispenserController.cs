@@ -50,6 +50,7 @@ namespace Dashboard.Controllers
 
             dispenser.IsActive = true;
             dispenser.DateAdded = DateTime.Now;
+            dispenser.LastRefill ="Not Checked yet";
 
             _context.Dispensers.Add(dispenser);
             await _context.SaveChangesAsync();

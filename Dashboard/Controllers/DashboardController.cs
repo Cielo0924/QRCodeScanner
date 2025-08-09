@@ -111,5 +111,13 @@ namespace Dashboard.Controllers
         }
 
 
+        public IActionResult GetDispenserLogs()
+        {
+            var dispenserLogs = _context.Dispensers.ToList(); // Replace with your actual DB context
+            return PartialView("_DispenserLogsPartial", dispenserLogs);
+        }
+
+
+
     }
 }

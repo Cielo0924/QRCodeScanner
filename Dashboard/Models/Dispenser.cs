@@ -9,7 +9,9 @@
         public bool IsActive { get; set; }
         public DateTime DateAdded { get; set; }
 
+        public string Status { get; set; } = "Active";
 
+        public string LastRefill { get; set; } = "Not checked yet";
         public Unit Unit { get; set; }
         public string? QRCodeImageBase64 { get; set; }
     }
